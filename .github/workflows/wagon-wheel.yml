@@ -1,0 +1,33 @@
+name: Wagon wheel
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # daily
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["scripts/**", ".github/workflows/wagon-wheel.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - name: Draw the wagon wheel
+        run: node scripts/wagon-wheel.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+      - name: Commit if it changed
+        run: |
+          git config user.name "wagon-wheel-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/wagon-wheel.svg
+          git diff --cached --quiet || (git commit -m "Update wagon wheel" && git push)
