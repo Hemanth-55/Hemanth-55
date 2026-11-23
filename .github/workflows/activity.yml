@@ -1,4 +1,4 @@
-name: Wagon wheel
+name: Activity
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["scripts/**", ".github/workflows/wagon-wheel.yml"]
+    paths: ["scripts/**", ".github/workflows/activity.yml"]
 
 permissions:
   contents: write
@@ -20,14 +20,14 @@ jobs:
         with:
           node-version: 20
       - run: npm install --no-audit --no-fund
-      - name: Draw the wagon wheel
-        run: node scripts/wagon-wheel.mjs
+      - name: Draw the activity chart
+        run: node scripts/activity.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_LOGIN: ${{ github.repository_owner }}
       - name: Commit if it changed
         run: |
-          git config user.name "wagon-wheel-bot"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/wagon-wheel.svg
-          git diff --cached --quiet || (git commit -m "Update wagon wheel" && git push)
+          git add assets/activity.svg
+          git diff --cached --quiet || (git commit -m "Update activity chart" && git push)

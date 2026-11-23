@@ -9,7 +9,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const cache = {};
 export function font(name) {
   if (!cache[name]) {
-    const b = fs.readFileSync(path.join(here, 'fonts', name + '.woff'));
+    const file = fs.existsSync(path.join(here, 'fonts', name + '.ttf')) ? name + '.ttf' : name + '.woff';
+    const b = fs.readFileSync(path.join(here, 'fonts', file));
     cache[name] = opentype.parse(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength));
   }
   return cache[name];
@@ -20,6 +21,7 @@ export const FONTS = {
   displayBold: 'unbounded-700',
   mono: 'jetbrains-mono-500',
   body: 'manrope-700',
+  r: 'Inter-400', m: 'Inter-500', sb: 'Inter-600', b: 'Inter-700',
 };
 
 // opentype's own toPathData() can emit NaN, so serialize commands ourselves
@@ -46,6 +48,9 @@ export const C = {
   void: '#04060B', navy: '#0A1120', char: '#111724', cyan: '#35E0FF', amber: '#FFB547',
   ice: '#DCEBFF', silver: '#B8C4D6', mute: '#93A1BA', uv: '#8B6CFF', line: '#1C2A42',
 };
+
+// Apple-style dark palette used by the profile
+export const A = { bg: '#000000', card: '#0A0A0C', line: '#1D1D21', ink: '#F5F5F7', sub: '#86868B', dim: '#48484D', blue: '#2997FF' };
 
 // deterministic pseudo-random so regenerated images don't jitter
 export function rng(seed = 7) {
