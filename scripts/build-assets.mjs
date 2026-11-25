@@ -111,6 +111,37 @@ ${metrics([['0.68', 'R² ON HELD-OUT', 'TEST SET'], ['−19%', 'ERROR VS LAST', 
   return frame(W, H, "Soccer Player Recruitment Model. Forecasts next-season goals plus assists per 90 for 941 Big-5 league players. R squared 0.68 on a held-out test set, 19 percent less error than last season's rate, ranking accuracy 0.82, 1,484 players forecast for 2026-27. Chart: predicted versus actual for 189 held-out players.", body);
 }
 
+function cvCard() {
+  const W = 1280, H = 420, x = 56;
+  const P = JSON.parse(fs.readFileSync(path.join(here, 'data', 'cv-poses.json'), 'utf8'));
+  const K = [[5, 7], [7, 9], [6, 8], [8, 10], [5, 6], [5, 11], [6, 12], [11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [0, 5], [0, 6]];
+  // real pose from broadcast video: 9 strokes, hip-centred, in units of body height
+  const skel = (f, cx, cy, S, col, op, delay) => {
+    let g = '';
+    for (const [a, b] of K) {
+      if (f[2 * a] == null || f[2 * b] == null) continue;
+      g += `<line x1="${(cx + f[2 * a] * S).toFixed(1)}" y1="${(cy + f[2 * a + 1] * S).toFixed(1)}" x2="${(cx + f[2 * b] * S).toFixed(1)}" y2="${(cy + f[2 * b + 1] * S).toFixed(1)}"/>`;
+    }
+    if (f[0] != null) g += `<circle cx="${(cx + f[0] * S).toFixed(1)}" cy="${(cy + f[1] * S).toFixed(1)}" r="3.2" fill="${col}" stroke="none"/>`;
+    return `<g stroke="${col}" stroke-opacity="${op}" fill-opacity="${op}" stroke-width="1.8" stroke-linecap="round" class="pt" ${d(delay)}>${g}</g>`;
+  };
+  const S = 215, cy = 196;
+  let viz = '';
+  P.stance.forEach((f, i) => { viz += skel(f, 940, cy, S, A.sub, .55, .5 + i * .05); });
+  P.contact.forEach((f, i) => { viz += skel(f, 1135, cy, S, A.blue, .6, 1.0 + i * .05); });
+  viz += text('STANCE', 930, 384, 10.5, F.mono, { ls: .16, anchor: 'middle', fill: A.sub })
+       + text('CONTACT', 1130, 384, 10.5, F.mono, { ls: .16, anchor: 'middle', fill: A.blue });
+  const c = P.cons;
+  const body = `
+<g class="up" ${d(.05)}>${text('COMPUTER VISION  ·  CRICKET', x, 74, 12.5, F.mono, { ls: .2, fill: A.blue })}</g>
+<g class="up" ${d(.15)}>${text('First Computer Vision Project', x - 2, 130, 42, F.sb, { ls: -.02, fill: A.ink })}</g>
+<g class="up" ${d(.25)}>${text('Rebuilds my 73 off 44 from broadcast video, ball by ball and stroke by stroke.', x, 172, 19, F.r, { fill: A.sub })}</g>
+<g class="up" ${d(.32)}>${text('Python  ·  OpenCV  ·  YOLO11 detection and pose  ·  OCR', x, 202, 15, F.r, { fill: A.dim })}</g>
+${metrics([['3,976', 'FRAMES', 'ANALYSED'], ['24', 'RUNS IN 7 BALLS', 'TURNED THE INNINGS'], [`${c.ratio}×`, 'SHOT VARIES MORE', 'THAN THE STANCE'], ['17', 'BODY POINTS', 'PER FRAME']], x, 300, 190, 46)}
+${viz}`;
+  return frame(W, H, `First Computer Vision Project. Rebuilds a 73 off 44 innings from broadcast video: 3,976 frames analysed, 24 runs in 7 balls turned the innings, the body at contact varies ${c.ratio} times more than the stance, 17 body points per frame. Chart: nine real stance and contact skeletons overlaid.`, body);
+}
+
 function halfCard({ kicker, title, sub, stats, label, viz = '' }) {
   const W = 630, H = 360, x = 44;
   const tl = title.map((t, i) => `<g class="up" ${d(.15 + i * .06)}>${text(t, x - 2, 108 + i * 40, 32, F.sb, { ls: -.02, fill: A.ink })}</g>`).join('');
@@ -125,6 +156,7 @@ ${metrics(stats, x, 286, 182, 36)}${viz}`;
 out('hero.svg', hero());
 out('profile.svg', sheet());
 out('card-soccer.svg', soccerCard());
+out('card-cv.svg', cvCard());
 out('card-football.svg', halfCard({
   kicker: 'MACHINE LEARNING  ·  FOOTBALL', title: ['Football Player', 'Market Value Model'],
   sub: 'Prices players from performance and career data.',

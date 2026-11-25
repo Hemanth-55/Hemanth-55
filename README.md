@@ -12,6 +12,8 @@ I build machine-learning models and data products for sport. I'm also a professi
 
 ### Selected work
 
+<a href="https://github.com/Hemanth-55/First-Computer-Vision-Project"><img src="assets/card-cv.svg" alt="First Computer Vision Project. Rebuilds a 73 off 44 innings from broadcast video: 3,976 frames analysed, 24 runs in 7 balls turned the innings, the body at contact varies 2.4 times more than the stance." width="100%"></a>
+
 <a href="https://github.com/Hemanth-55/Soccer-Player-Recruitment-Model"><img src="assets/card-soccer.svg" alt="Soccer Player Recruitment Model. R squared 0.68 on a held-out test set, 19 percent less error than last season's rate, ranking accuracy 0.82, 1,484 players forecast for 2026-27." width="100%"></a>
 
 <p>
@@ -21,7 +23,7 @@ I build machine-learning models and data products for sport. I'm also a professi
 
 ### Toolkit
 
-**Python** (pandas, NumPy, scikit-learn, matplotlib) · **SQL** · **Tableau** · **Excel** · **JavaScript** · **SAP S/4HANA** · **Google Cloud** · **Claude**
+**Python** (pandas, NumPy, scikit-learn, matplotlib, OpenCV) · **Computer vision** (YOLO11, OCR) · **SQL** · **Tableau** · **Excel** · **JavaScript** · **SAP S/4HANA** · **Google Cloud** · **Claude**
 
 <img src="assets/activity.svg" alt="My GitHub contributions over the last 26 weeks, updated daily." width="100%">
 
